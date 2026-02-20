@@ -2,7 +2,6 @@ import { useApp } from "../context/AppContext";
 import LocationModal from "./LocationModal";
 import { useState } from "react";
 
-
 const NAV_ITEMS = [
   { id: "home", icon: "fa-house", label: "Beranda" },
   { id: "prayer", icon: "fa-clock", label: "Waktu Sholat" },
@@ -16,7 +15,6 @@ const NAV_ITEMS = [
 export default function Sidebar() {
   const { activePage, setActivePage, hijriDate, location } = useApp();
   const [showLocationModal, setShowLocationModal] = useState(false);
- 
 
   return (
     <>
@@ -130,7 +128,13 @@ export default function Sidebar() {
           </button>
         </div>
 
-        
+        {/* Copyright */}
+        <div className="px-4 pb-4 pt-2">
+          <p className="text-[10px] text-center text-[#586488] leading-relaxed">
+            © {new Date().getFullYear()} Ramadhan App <br />
+            Developed by Fernanda Yoga.
+          </p>
+        </div>
       </aside>
       {/* Modal */}
       {showLocationModal && (

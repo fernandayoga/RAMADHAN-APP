@@ -90,10 +90,10 @@ export default function Home() {
   const { location, hijriDate } = useApp();
    const [showLocationModal, setShowLocationModal] = useState(false);
   const now = new Date();
-  const greeting = now.getHours() < 12 ? "Selamat Pagi" : now.getHours() < 17 ? "Selamat Siang" : "Selamat Malam";
+  const greeting = now.getHours() < 11 ? "Selamat Pagi" : now.getHours() < 16 ? "Selamat Siang": now.getHours() < 19 ? "Selamat Sore" : "Selamat Malam";
 
   return (
-    <div className="p-6 lg:p-8 flex flex-col gap-6 max-w-5xl mx-auto animate-fadeinup">
+    <div className="p-6 lg:p-8 flex flex-col gap-6 max-w-5xl mx-auto animate-fadeinup ">
 
       {/* Hero Banner */}
       <div className="relative overflow-hidden rounded-3xl p-8 lg:p-12 text-center"
@@ -176,11 +176,19 @@ export default function Home() {
           <QuickCard key={page} icon={icon} label={label} desc={desc} page={page} color={color} />
         ))}
       </div>
+      
 
       {showLocationModal && (
         <LocationModal onClose={() => setShowLocationModal(false)} />
       )}
 
+      {/* Copyright */}
+        <div className="px-4 pb-1 pt-2 ">
+          <p className="text-[10px] text-center text-[#586488] leading-relaxed">
+            © {new Date().getFullYear()} Ramadhan App <br />
+            Developed by Fernanda Yoga.
+          </p>
+        </div>
     </div>
   );
 }
