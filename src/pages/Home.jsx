@@ -1,4 +1,7 @@
 import { useApp } from "../context/AppContext";
+import LocationModal from "../components/LocationModal";
+import { useState } from "react";
+
 
 const QUICK_LINKS = [
   {
@@ -85,6 +88,7 @@ const STARS = Array.from({ length: 24 }, (_, i) => ({
 
 export default function Home() {
   const { location, hijriDate } = useApp();
+   const [showLocationModal, setShowLocationModal] = useState(false);
   const now = new Date();
   const greeting = now.getHours() < 12 ? "Selamat Pagi" : now.getHours() < 17 ? "Selamat Siang" : "Selamat Malam";
 
@@ -133,15 +137,30 @@ export default function Home() {
         <p className="text-sm text-[#6a88b0] mb-5 font-arabic">{hijriDate}</p>
        
 
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm"
-          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-          <i className="fa-solid fa-location-dot text-[#7c3aed] text-xs" />
-          <span className="text-[#8878b0] text-xs">
+        <button
+          onClick={() => setShowLocationModal(true)}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs transition-all duration-200 cursor-pointer border-none"
+          style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.08)"
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.border = "1px solid rgba(59,130,246,0.35)";
+            e.currentTarget.style.background = "rgba(59,130,246,0.08)";
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.border = "1px solid rgba(255,255,255,0.08)";
+            e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+          }}
+        >
+          <i className="fa-solid fa-location-dot text-[#3b82f6]" />
+          <span className="text-[#4a6890]">
             {location
               ? (location.city || `${location.lat.toFixed(2)}°, ${location.lng.toFixed(2)}°`)
-              : "Lokasi belum diset — klik untuk set lokasi"}
+              : "Belum diset — klik untuk atur lokasi"}
           </span>
-        </div>
+          <i className="fa-solid fa-pen text-[#2a3858] text-[10px]" />
+        </button>
       </div>
 
       {/* Section title */}
@@ -157,6 +176,10 @@ export default function Home() {
           <QuickCard key={page} icon={icon} label={label} desc={desc} page={page} color={color} />
         ))}
       </div>
+
+      {showLocationModal && (
+        <LocationModal onClose={() => setShowLocationModal(false)} />
+      )}
 
     </div>
   );

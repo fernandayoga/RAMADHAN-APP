@@ -20,7 +20,7 @@ export default function TopBar() {
   return (
     <>
       {/* Top header - mobile only */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3"
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 "
         style={{ background: "rgba(13,5,32,0.95)", backdropFilter: "blur(16px)", borderBottom: "1px solid rgba(212,168,67,0.12)" }}>
         <div className="flex items-center gap-2">
           <i className="fa-solid fa-star-and-crescent text-[#d4a843] text-lg" />
