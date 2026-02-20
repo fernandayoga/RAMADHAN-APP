@@ -15,8 +15,9 @@ const NAV_ITEMS = [
   { id: "home", icon: "fa-house" },
   { id: "prayer", icon: "fa-clock" },
   { id: "iftar", icon: "fa-moon" },
-  { id: "qibla", icon: "fa-compass" }, // ← tambah ini
+  { id: "qibla", icon: "fa-compass" },
   { id: "quran", icon: "fa-book-open" },
+  { id: "fasting", icon: "fa-book" }, // ← tambahan baru
   { id: "tracker", icon: "fa-list-check" },
 ];
 
