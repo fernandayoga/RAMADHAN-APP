@@ -183,7 +183,7 @@ export default function Home() {
       )}
 
       {/* Copyright */}
-        <div className="px-4 pb-1 pt-2 ">
+        <div className="px-4 pb-1 pt-2 lg:hidden">
           <p className="text-[10px] text-center text-[#586488] leading-relaxed">
             © {new Date().getFullYear()} Ramadhan App <br />
             Developed by Fernanda Yoga.

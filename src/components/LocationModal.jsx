@@ -30,6 +30,8 @@ export default function LocationModal({ onClose }) {
   };
 }, []);
 
+
+
   const handleDetect = async () => {
     await detect();
     setSuccess(true);
