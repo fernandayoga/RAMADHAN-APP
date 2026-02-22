@@ -36,6 +36,9 @@ useEffect(() => {
   }
 };
 
+console.log(activeSurah)
+console.log(surahData)
+
   const saveBookmark = (surahNum, ayahNum) => {
     setQuranBookmark({ surah: surahNum, ayah: ayahNum });
   };

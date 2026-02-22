@@ -91,6 +91,7 @@ export default function Home() {
    const [showLocationModal, setShowLocationModal] = useState(false);
   const now = new Date();
   const greeting = now.getHours() < 11 ? "Selamat Pagi" : now.getHours() < 16 ? "Selamat Siang": now.getHours() < 19 ? "Selamat Sore" : "Selamat Malam";
+ 
 
   return (
     <div className="p-6 lg:p-8 flex flex-col gap-6 max-w-5xl mx-auto animate-fadeinup ">

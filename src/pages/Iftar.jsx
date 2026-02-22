@@ -4,7 +4,7 @@ import { usePrayerTimes } from "../hooks/usePrayerTimes";
 import LocationModal from "../components/LocationModal";
 import { getFastingStatus, getCountdown } from "../utils/iftar";
 
-const DOA_SAHUR = {
+const   DOA_SAHUR = {
   arabic: "نَوَيْتُ صَوْمَ غَدٍ عَنْ أَدَاءِ فَرْضِ شَهْرِ رَمَضَانَ هَذِهِ السَّنَةِ لِلَّهِ تَعَالَى",
   latin:  "Nawaitu shauma ghadin 'an adaa'i fardhi syahri Ramadhana hadzihis sanati lillahi ta'ala.",
   arti:   "Saya niat berpuasa esok hari untuk menunaikan kewajiban puasa bulan Ramadhan tahun ini karena Allah Ta'ala."
