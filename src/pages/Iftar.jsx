@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useApp } from "../context/AppContext";
 import { usePrayerTimes } from "../hooks/usePrayerTimes";
 import LocationModal from "../components/LocationModal";
@@ -269,7 +269,34 @@ function TimeCard({ icon, title, subtitle, time, subtime, subLabel, color }) {
   );
 }
 
+
+
 function DoaCard({ title, icon, color, doa, isOpen, onToggle }) {
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+
+    if (isOpen) {
+      // Set height dari 0 ke scrollHeight
+      el.style.height = "0px";
+      el.style.opacity = "0";
+      requestAnimationFrame(() => {
+        el.style.height = `${el.scrollHeight}px`;
+        el.style.opacity = "1";
+      });
+    } else {
+      // Set height dari scrollHeight ke 0
+      el.style.height = `${el.scrollHeight}px`;
+      el.style.opacity = "1";
+      requestAnimationFrame(() => {
+        el.style.height = "0px";
+        el.style.opacity = "0";
+      });
+    }
+  }, [isOpen]);
+
   return (
     <div
       className="rounded-2xl overflow-hidden"
@@ -278,7 +305,7 @@ function DoaCard({ title, icon, color, doa, isOpen, onToggle }) {
         border: "1px solid rgba(255,255,255,0.06)"
       }}
     >
-      {/* Toggle header */}
+      {/* Toggle header — tetap sama */}
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between px-5 py-4 cursor-pointer border-none"
@@ -293,11 +320,25 @@ function DoaCard({ title, icon, color, doa, isOpen, onToggle }) {
           </div>
           <p className="text-sm font-semibold text-[#c8d0e8]">{title}</p>
         </div>
-        <i className={`fa-solid fa-chevron-down text-[#2a3858] text-xs transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+        <i
+          className="fa-solid fa-chevron-down text-[#2a3858] text-xs"
+          style={{
+            transition: "transform 0.3s ease",
+            transform: isOpen ? "rotate(180deg)" : "rotate(0deg)"
+          }}
+        />
       </button>
 
-      {/* Content */}
-      {isOpen && (
+      {/* Content — selalu di DOM, tingginya yang dianimasikan */}
+      <div
+        ref={contentRef}
+        style={{
+          height: "0px",
+          opacity: 0,
+          overflow: "hidden",
+          transition: "height 0.35s ease, opacity 0.3s ease",
+        }}
+      >
         <div
           className="px-5 pb-5 flex flex-col gap-4 border-t"
           style={{ borderColor: "rgba(255,255,255,0.05)" }}
@@ -318,13 +359,18 @@ function DoaCard({ title, icon, color, doa, isOpen, onToggle }) {
           {/* Arti */}
           <div
             className="px-4 py-3 rounded-xl"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}
+            style={{
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.05)"
+            }}
           >
-            <p className="text-[11px] text-[#2a3858] uppercase tracking-widest font-medium mb-1">Artinya</p>
+            <p className="text-[11px] text-[#2a3858] uppercase tracking-widest font-medium mb-1">
+              Artinya
+            </p>
             <p className="text-xs text-[#4a6890] leading-relaxed">{doa.arti}</p>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

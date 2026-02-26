@@ -12,15 +12,7 @@ export const useApp = () => {
 
 
 
-// const getHijriDate = () => {
-//   try {
-//     return new Intl.DateTimeFormat("id-ID-u-ca-islamic", {
-//       day: "numeric", month: "long", year: "numeric",
-//     }).format(new Date());
-//   } catch {
-//     return "Ramadhan 1446 H";
-//   }
-// };
+
 
 
 
@@ -52,7 +44,7 @@ const fetchHijriDate = async () => {
     
     const data = await response.json();
     
-    console.log(data.data.hijri);
+    
     
     if (data.code === 200) {
       const hijri = data.data.hijri;

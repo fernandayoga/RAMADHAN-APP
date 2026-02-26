@@ -59,9 +59,36 @@ export default function Tracker() {
         )}
       </div>
 
-     
-     
-      
+      {/* Tabs */}
+      <div
+        className="flex gap-1 p-1 rounded-2xl"
+        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+      >
+        {[
+          { id: "today",  label: "Check-point",  icon: "fa-calendar-day" },
+          { id: "recap",  label: "Rekap",     icon: "fa-chart-bar"    },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium cursor-pointer border-none transition-all duration-200"
+            style={activeTab === tab.id ? {
+              background: "linear-gradient(135deg, #1e3a8a, #1e40af)",
+              color: "#e8eaf6",
+              boxShadow: "0 4px 12px rgba(30,58,138,0.3)"
+            } : {
+              background: "transparent",
+              color: "#3a5070"
+            }}
+          >
+            <i className={`fa-solid ${tab.icon} text-xs`} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab: Hari Ini */}
+      {activeTab === "today" && (
         <TodayTab
           activeDay={activeDay}
           setActiveDay={setActiveDay}
@@ -69,9 +96,16 @@ export default function Tracker() {
           todayDay={todayDay}
           onToggle={toggleIbadah}
         />
-      
+      )}
 
-      
+      {/* Tab: Rekap */}
+      {activeTab === "recap" && (
+        <RecapTab
+          trackerLog={trackerLog}
+          stats={stats}
+          streak={streak}
+        />
+      )}
     </div>
   );
 }
@@ -252,4 +286,128 @@ function IbadahItem({ ibadah, checked, onToggle }) {
   );
 }
 
+// ─── Recap Tab ────────────────────────────────────────
 
+function RecapTab({ trackerLog, stats, streak }) {
+  return (
+    <div className="flex flex-col gap-5">
+
+      
+
+      {/* Stats per ibadah */}
+      <div
+        className="rounded-2xl overflow-hidden"
+        style={{
+          background: "rgba(255,255,255,0.02)",
+          border: "1px solid rgba(255,255,255,0.06)"
+        }}
+      >
+        <div className="px-5 py-4 border-b" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
+          <p className="text-sm font-semibold text-[#c8d0e8]">
+            <i className="fa-solid fa-chart-bar mr-2 text-[#3b82f6]" />
+            Statistik per Ibadah
+          </p>
+        </div>
+        <div className="px-5 py-3 flex flex-col gap-3">
+          {IBADAH_LIST.map(ibadah => {
+            const count = stats[ibadah.id] || 0;
+            const pct   = Math.round((count / RAMADHAN_DAYS) * 100);
+            return (
+              <div key={ibadah.id} className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <i
+                      className={`fa-solid ${ibadah.icon} text-xs w-4 text-center`}
+                      style={{ color: ibadah.color }}
+                    />
+                    <span className="text-xs text-[#4a6890]">{ibadah.label}</span>
+                  </div>
+                  <span className="text-xs font-bold" style={{ color: ibadah.color }}>
+                    {count} / {RAMADHAN_DAYS}
+                  </span>
+                </div>
+                <div
+                  className="h-1.5 rounded-full overflow-hidden"
+                  style={{ background: "rgba(255,255,255,0.05)" }}
+                >
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{
+                      width: `${pct}%`,
+                      background: ibadah.color
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Heatmap 30 hari */}
+      <HeatmapCalendar trackerLog={trackerLog} />
+    </div>
+  );
+}
+
+function HeatmapCalendar({ trackerLog }) {
+  return (
+    <div
+      className="rounded-2xl px-5 py-5"
+      style={{
+        background: "rgba(255,255,255,0.02)",
+        border: "1px solid rgba(255,255,255,0.06)"
+      }}
+    >
+      <p className="text-sm font-semibold text-[#c8d0e8] mb-4">
+        <i className="fa-solid fa-fire-flame-curved mr-2 text-[#ef4444]" />
+        Heatmap 30 Hari
+      </p>
+      <div className="grid grid-cols-10 gap-1.5">
+        {Array.from({ length: RAMADHAN_DAYS }, (_, i) => i + 1).map(day => {
+          const { done, total } = getDayScore(trackerLog, day);
+          const pct             = done / total;
+          const todayDay        = getTodayRamadhanDay();
+          const isFuture        = todayDay ? day > todayDay : false;
+
+          const bg = isFuture
+            ? "rgba(255,255,255,0.03)"
+            : pct === 0
+            ? "rgba(255,255,255,0.06)"
+            : pct < 0.4
+            ? "rgba(212,168,67,0.2)"
+            : pct < 0.7
+            ? "rgba(212,168,67,0.45)"
+            : pct < 1
+            ? "rgba(212,168,67,0.7)"
+            : "#d4a843";
+
+          return (
+            <div
+              key={day}
+              className="aspect-square rounded-lg flex items-center justify-center"
+              style={{ background: bg }}
+              title={`Hari ${day}: ${done}/${total} ibadah`}
+            >
+              <span
+                className="text-[9px] font-bold"
+                style={{ color: pct >= 0.7 ? "#070d1f" : "rgba(255,255,255,0.3)" }}
+              >
+                {day}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Legend heatmap */}
+      <div className="flex items-center gap-2 mt-3 justify-end">
+        <span className="text-[10px] text-[#2a3858]">Kurang</span>
+        {["rgba(255,255,255,0.06)", "rgba(212,168,67,0.2)", "rgba(212,168,67,0.45)", "rgba(212,168,67,0.7)", "#d4a843"].map((bg, i) => (
+          <div key={i} className="w-3 h-3 rounded-sm" style={{ background: bg }} />
+        ))}
+        <span className="text-[10px] text-[#2a3858]">Lengkap</span>
+      </div>
+    </div>
+  );
+}
